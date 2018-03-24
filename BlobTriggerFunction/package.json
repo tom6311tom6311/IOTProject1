@@ -1,0 +1,18 @@
+{
+  "name": "computervisiondemo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tom Huang",
+  "license": "ISC",
+  "devDependencies": {
+    "node-fetch": "^2.0.0"
+  },
+  "dependencies": {
+    "node-mailjet": "^3.2.1",
+    "text-encoding": "^0.6.4"
+  }
+}

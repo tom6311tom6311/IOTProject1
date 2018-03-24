@@ -1,0 +1,12 @@
+{
+  "bindings": [
+    {
+      "name": "myBlob",
+      "type": "blobTrigger",
+      "direction": "in",
+      "path": "iot-demo-computer-vision-container/{name}",
+      "connection": "tom6311tom6311_STORAGE"
+    }
+  ],
+  "disabled": false
+}
