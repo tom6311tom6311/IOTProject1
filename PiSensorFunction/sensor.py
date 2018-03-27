@@ -17,7 +17,7 @@ SOUND_SENSOR_CHANNEL = 12
 IMAGE_FORMAT = '.png'
 PHOTO_FOLDER = 'photos/'
 REGULAR_SHOT_INTERVAL = 60
-DIFF_TOLORANCE = 2
+DIFF_TOLORANCE = 10
 
 def sigmoid(x):
   return 1 / (1 + np.exp(-x))
@@ -39,7 +39,9 @@ def upload_photo(file_name):
 def compute_diff_photo(file_name, prev_file_name):
   abnormal_img = imread(PHOTO_FOLDER + file_name)
   normal_img = imread(PHOTO_FOLDER + prev_file_name)
-  diff_img_mask = sigmoid(np.abs(abnormal_img - normal_img) - DIFF_TOLORANCE)
+  diff_square = np.sum(np.square(abnormal_img - normal_img), axis=2)
+  diff_square = np.transpose(np.array([diff_square, diff_square, diff_square]), axes=[1,2,0])
+  diff_img_mask = (diff_square > DIFF_TOLORANCE*DIFF_TOLORANCE).astype(int)
   diff_img = np.multiply(diff_img_mask, abnormal_img)
   diff_photo_name = PHOTO_FOLDER + 'diff_' + file_name
   imsave(diff_photo_name, diff_img)
