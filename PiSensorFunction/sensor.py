@@ -13,7 +13,6 @@ CONNECTION_PROTOCOL = IoTHubTransportProvider.HTTP
 EVENT_SUCCESS = "success"
 EVENT_FAILED = "failed"
 SOUND_SENSOR_CHANNEL = 12
-PHOTO_DELAY = 3
 IMAGE_FORMAT = '.png'
 PHOTO_FOLDER = 'photos/'
 
@@ -23,7 +22,6 @@ def iothub_client_init():
 
 def take_photo(file_name):
   os.system("raspistill -o " + PHOTO_FOLDER + file_name)
-  time.sleep(PHOTO_DELAY)
 
 def upload_photo(file_name):
   f = open(PHOTO_FOLDER + file_name, "r")
