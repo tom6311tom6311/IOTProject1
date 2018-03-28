@@ -17,7 +17,7 @@ SOUND_SENSOR_CHANNEL = 12
 IMAGE_FORMAT = '.png'
 PHOTO_FOLDER = 'photos/'
 REGULAR_SHOT_INTERVAL = 60
-DIFF_TOLORANCE = 10
+COSINE_SIMILARITY_THRESHOLD = .8
 
 def sigmoid(x):
   return 1 / (1 + np.exp(-x))
@@ -39,12 +39,15 @@ def upload_photo(file_name):
 def compute_diff_photo(file_name, prev_file_name):
   abnormal_img = imread(PHOTO_FOLDER + file_name)
   normal_img = imread(PHOTO_FOLDER + prev_file_name)
-  diff_square = np.sum(np.square(abnormal_img - normal_img), axis=2)
-  diff_square = np.transpose(np.array([diff_square, diff_square, diff_square]), axes=[1,2,0])
-  diff_img_mask = (diff_square > DIFF_TOLORANCE*DIFF_TOLORANCE).astype(int)
-  diff_img = np.multiply(diff_img_mask, abnormal_img)
-  diff_photo_name = PHOTO_FOLDER + 'diff_' + file_name
-  imsave(diff_photo_name, diff_img)
+  abnormal_pt_norm = np.sqrt(np.sum(np.square(abnormal_img), axis=2))
+  normal_pt_norm = np.sqrt(np.sum(np.square(normal_img), axis=2))
+  dot = np.sum(abnormal_img * normal_img, axis=2)
+  cosine_sim = dot / (abnormal_pt_norm * normal_pt_norm)
+  cosine_sim = np.transpose(np.array([cosine_sim, cosine_sim, cosine_sim]), axes=[1,2,0])
+  diff_img_mask = (cosine_sim < COSINE_SIMILARITY_THRESHOLD).astype(int)
+  diff_img = np.multiply(diff_img_mask, abnormal_img).astype(int)
+  diff_photo_name = 'diff_' + file_name
+  imsave(PHOTO_FOLDER + diff_photo_name, diff_img)
   return diff_photo_name
 
 def abnormal_sound_callback(channel):
